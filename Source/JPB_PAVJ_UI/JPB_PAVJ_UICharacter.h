@@ -73,13 +73,22 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 #pragma endregion
 
-public:
+protected:
+	virtual void BeginPlay() override;
 
 private:
+#pragma region Skill Tree
 	/**
 	 * @brief @TOFILL
 	 */
 	UPROPERTY(EditAnywhere, meta = (DisplayName = "Skill Tree Component"));
 	TObjectPtr<USkillTree> m_pSkillTreeComponent;
+
+	/**
+	 * @brief @TOFILL
+	 */
+	UPROPERTY(EditAnywhere, Category = "Skill Tree", meta = (DisplayName = "Current Skill Points"))
+	int32 m_iCurrentSkillPoints;
+#pragma endregion
 };
 

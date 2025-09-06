@@ -98,6 +98,12 @@ void AJPB_PAVJ_UICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	}
 }
 
+void AJPB_PAVJ_UICharacter::BeginPlay() {
+	Super::BeginPlay();
+
+	
+}
+
 void AJPB_PAVJ_UICharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
