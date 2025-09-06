@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
+#include "Components/ActorComponent.h"
 #include "SkillTree.generated.h"
 
 enum class ENodeState : uint8 {
@@ -32,7 +32,7 @@ struct FSkillNode {
 	int32 m_iUnlockCost;
 
 	/**
-   * @brief Children nodes connected to this one.
+   * @brief Unlocked parent nodes required to unlock this one.
    */
 	TArray<TObjectPtr<FSkillNode>> m_lRequiredParents;
 #pragma endregion 
@@ -70,8 +70,8 @@ struct FSkillNode {
 #pragma endregion
 };
 
-UCLASS()
-class JPB_PAVJ_UI_API USkillTree : public UObject
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
+class JPB_PAVJ_UI_API USkillTree : public UActorComponent
 {
 	GENERATED_BODY()
 	
