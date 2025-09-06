@@ -13,11 +13,14 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 
+// Component
+class USkillTree;
+
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class AJPB_PAVJ_UICharacter : public ACharacter
-{
+class AJPB_PAVJ_UICharacter : public ACharacter {
+#pragma region Template Defaults
 	GENERATED_BODY()
 
 	/** Camera boom positioning the camera behind the character */
@@ -68,5 +71,15 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+#pragma endregion
+
+public:
+
+private:
+	/**
+	 * @brief @TOFILL
+	 */
+	UPROPERTY(EditAnywhere, meta = (DisplayName = "Skill Tree Component"));
+	TObjectPtr<USkillTree> m_pSkillTreeComponent;
 };
 

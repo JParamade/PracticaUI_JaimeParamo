@@ -70,11 +70,18 @@ struct FSkillNode {
 #pragma endregion
 };
 
+// Data
+class UDataTable;
+
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class JPB_PAVJ_UI_API USkillTree : public UActorComponent
 {
 	GENERATED_BODY()
 	
 public:
-
+	/**
+	 * @brief Data Table containing Skill Node data.
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill Tree", meta = (DisplayName = "Skill Node Data"))
+	TObjectPtr<UDataTable> m_pNodeData;
 };

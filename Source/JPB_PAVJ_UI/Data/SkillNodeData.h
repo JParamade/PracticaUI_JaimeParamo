@@ -5,7 +5,7 @@
 #include "SkillNodeData.generated.h"
 
 USTRUCT(BlueprintType)
-struct FSkillNodeData {
+struct FSkillNodeData : public FTableRowBase {
   GENERATED_BODY()
 
   /**
