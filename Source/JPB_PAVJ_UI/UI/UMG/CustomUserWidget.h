@@ -30,5 +30,5 @@ protected:
 	/**
 	 * @brief List of non focusable UI elements contained in the widget.
 	 */
-	TArray<UCustomUserWidget> m_lWidgets;
+	TArray<TObjectPtr<UCustomUserWidget>> m_lWidgets;
 };
