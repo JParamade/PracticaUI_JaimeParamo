@@ -16,6 +16,17 @@ void UCustomButtonWidget::Hide() {
   if (IsValid(m_pButton)) m_pButton->SetVisibility(ESlateVisibility::Hidden);
 }
 
+FVector2D UCustomButtonWidget::GetSize() const {
+  return m_vSize;
+}
+
+void UCustomButtonWidget::SetSize(FVector2D _vNewSize) {
+  if (IsValid(m_pSizeBox)) {
+    m_pSizeBox->SetWidthOverride(_vNewSize.X);
+    m_pSizeBox->SetHeightOverride(_vNewSize.Y);
+  }
+}
+
 void UCustomButtonWidget::NativeConstruct()  {
   Super::NativeConstruct();
 
@@ -26,11 +37,4 @@ void UCustomButtonWidget::SynchronizeProperties() {
   Super::SynchronizeProperties();
 
   SetSize(m_vSize);
-}
-
-void UCustomButtonWidget::SetSize(FVector2D _vNewSize) {
-  if (IsValid(m_pSizeBox)) {
-    m_pSizeBox->SetWidthOverride(_vNewSize.X);
-    m_pSizeBox->SetHeightOverride(_vNewSize.Y);
-  }
 }

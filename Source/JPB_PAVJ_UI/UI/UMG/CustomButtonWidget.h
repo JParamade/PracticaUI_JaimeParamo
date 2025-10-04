@@ -13,6 +13,7 @@ class JPB_PAVJ_UI_API UCustomButtonWidget : public UCustomUserWidget {
   GENERATED_BODY()
 
 public:
+#pragma region Visibility
   /**
    * @brief Displays the UMG elements of this Widget on screen.
    */
@@ -21,8 +22,25 @@ public:
    * @brief Hides the UMG elements of this Widget.
    */
   virtual void Hide() override;
+#pragma endregion
+
+#pragma region Layout
+  /**
+   * @brief @TOFILL
+   * @return 
+   */
+  UFUNCTION(BlueprintCallable, Category = "JParamade/UI/Layout", meta = (DisplayName = "Get Size"))
+  FVector2D GetSize() const;
+  /**
+   * @brief @TOFILL
+   * @param _vNewSize 
+   */
+  UFUNCTION(BlueprintCallable, Category = "JParamade/UI/Layout", meta = (DisplayName = "Set Size"))
+  void SetSize(FVector2D _vNewSize);
+#pragma endregion
 
 protected:
+#pragma region Native Functions
   /**
    * @brief Called when the widget is constructed.
    */
@@ -31,12 +49,15 @@ protected:
    * @brief @TOFILL
    */
   virtual void SynchronizeProperties() override;
+#pragma endregion
 
+#pragma region Components
   /**
    * @brief @TOFILL
    */
   UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
   TObjectPtr<UButton> m_pButton;
+
   /**
    * @brief @TOFILL
    */
@@ -47,7 +68,5 @@ protected:
    */
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JParamade|UI|Layout", meta = (DisplayName = "Size", ClampMin = "0.0"))
   FVector2D m_vSize = FVector2D(100.f, 100.f);
-
-private:
-  void SetSize(FVector2D _vNewSize);
+#pragma endregion
 };
