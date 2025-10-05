@@ -16,6 +16,9 @@ struct FInputActionValue;
 // Component
 class USkillTree;
 
+// Widget
+class USkillTreeWidget;
+
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
@@ -47,6 +50,10 @@ class AJPB_PAVJ_UICharacter : public ACharacter {
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	/** Handle Tree Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* HandleTreeAction;
+
 public:
 	AJPB_PAVJ_UICharacter();
 	
@@ -58,7 +65,9 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
+
+	/** Called for open/close skill tree */
+	void HandleSkillTree(const FInputActionValue& Value);
 
 protected:
 
@@ -74,7 +83,17 @@ public:
 #pragma endregion
 
 protected:
+#pragma region Native Functions
 	virtual void BeginPlay() override;
+#pragma endregion
+
+#pragma region Widget
+	/**
+   * @brief @TOFILL
+   */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JParamade|UI", meta = (DisplayName = "Skill Tree Widget"))
+	TObjectPtr<USkillTreeWidget> m_pSkillTreeWidget;
+#pragma endregion
 
 private:
 #pragma region Skill Tree

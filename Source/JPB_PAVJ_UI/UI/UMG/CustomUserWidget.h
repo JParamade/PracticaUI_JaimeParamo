@@ -21,6 +21,13 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Custom User Widget", meta = (DisplayName = "Hide"))
 	virtual void Hide();
+
+	/**
+	 * @brief @TOFILL
+	 * @return
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Custom User Widget", meta = (DisplayName = "Is Visible"))
+	virtual bool IsWidgetVisible() const;
 #pragma endregion
 
 protected:
@@ -36,5 +43,12 @@ protected:
 	 * @brief List of non focusable UI elements contained in the widget.
 	 */
 	TArray<TObjectPtr<UCustomUserWidget>> m_lWidgets;
+#pragma endregion
+
+#pragma region Flags
+	/**
+	 * @brief @TOFILL
+	 */
+	bool m_bWidgetVisible = false;
 #pragma endregion
 };

@@ -14,6 +14,9 @@
 // Component
 #include "JPB_PAVJ_UI/UI/SkillTree.h"
 
+// Widget
+#include "JPB_PAVJ_UI/UI/UMG/SkillTreeWidget.h"
+
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 //////////////////////////////////////////////////////////////////////////
@@ -91,6 +94,9 @@ void AJPB_PAVJ_UICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AJPB_PAVJ_UICharacter::Look);
+
+		// Handle Tree
+		EnhancedInputComponent->BindAction(HandleTreeAction, ETriggerEvent::Triggered, this, &AJPB_PAVJ_UICharacter::HandleSkillTree);
 	}
 	else
 	{
@@ -101,7 +107,7 @@ void AJPB_PAVJ_UICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 void AJPB_PAVJ_UICharacter::BeginPlay() {
 	Super::BeginPlay();
 
-	
+	if (IsValid(m_pSkillTreeWidget)) m_pSkillTreeWidget->AddToViewport();
 }
 
 void AJPB_PAVJ_UICharacter::Move(const FInputActionValue& Value)
@@ -137,5 +143,12 @@ void AJPB_PAVJ_UICharacter::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+void AJPB_PAVJ_UICharacter::HandleSkillTree(const FInputActionValue& Value) {
+	if (IsValid(m_pSkillTreeWidget)) {
+		if (!m_pSkillTreeWidget->IsWidgetVisible()) m_pSkillTreeWidget->Show();
+		else m_pSkillTreeWidget->Hide();
 	}
 }

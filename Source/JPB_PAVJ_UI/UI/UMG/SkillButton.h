@@ -29,6 +29,10 @@ protected:
   virtual void NativeConstruct() override;
   /**
    * @brief @TOFILL
+   */
+  virtual void SynchronizeProperties() override;
+  /**
+   * @brief @TOFILL
    * @param MyGeometry
    * @param InDeltaTime
    */
@@ -49,11 +53,33 @@ protected:
   void OnButtonReleased();
 #pragma endregion
 
-#pragma region Vibration
+#pragma region Style
   /**
    * @brief @TOFILL
    */
-  bool m_bIsVibrating = false;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JParamade|UI|Style", meta = (DisplayName = "Material Base"))
+  UMaterialInterface* m_pMaterialBase;
+
+  /**
+   * @brief @TOFILL
+   */
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JParamade|UI|Style", meta = (DisplayName = "Texture"))
+  TObjectPtr<UTexture2D> m_pTexture;
+
+  /**
+   * @brief 
+   */
+  void SetupDynamicMaterial();
+#pragma endregion
+
+#pragma region State
+  /**
+   * @brief @TOFILL
+   */
+  bool m_bIsPressed = false;
+#pragma endregion
+
+#pragma region Vibration
   /**
    * @brief @TOFILL
    */
@@ -63,7 +89,7 @@ protected:
    * @brief @TOFILL
    */
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JParamade|UI|Feedback", meta = (DisplayName = "Vibration Amplitude"))
-  float m_fVibrationAmplitude = 2.5f;
+  float m_fVibrationAmplitude = 1.f;
   /**
    * @brief @TOFILL
    */
@@ -75,7 +101,27 @@ protected:
 #pragma endregion
 
 #pragma region Scale
+  /**
+   * @brief @TOFILL
+   */
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JParamade|UI|Feedback", meta = (DisplayName = "Pressed Scale"))
   float m_fPressedScale = 1.05f;
+#pragma endregion
+
+#pragma region Fill Color
+  /**
+   * @brief @TOFILL
+   */
+  float m_fFillAmount = .0f;
+  /**
+   * @brief @TOFILL
+   */
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JParamade|UI|Feedback", meta = (DisplayName = "Fill Speed"))
+  float m_fFillSpeed = 1.f;
+
+  /**
+   * @brief @TOFILL
+   */
+  TObjectPtr<UMaterialInstanceDynamic> m_pFillDynamicMaterial;
 #pragma endregion
 };
