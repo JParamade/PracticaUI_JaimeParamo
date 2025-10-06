@@ -93,7 +93,10 @@ bool USkillTree::TryUnlockNode(const FName& _rNodeId, int32& _rCurrentPoints) {
         }
       }
 
-      if (bAllParentsUnlocked && pChild->IsLocked()) pChild->m_eState = ENodeState::Available;
+      if (bAllParentsUnlocked && pChild->IsLocked()) {
+        pChild->m_eState = ENodeState::Available;
+        OnNodeChanged.Broadcast(pChild->m_sId);
+      }
     }
   }
 

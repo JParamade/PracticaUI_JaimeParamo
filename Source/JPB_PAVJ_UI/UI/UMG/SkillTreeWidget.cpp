@@ -1,5 +1,8 @@
 #include "SkillTreeWidget.h"
 
+// Animation
+#include "Animation/WidgetAnimation.h"
+
 // Character
 #include "JPB_PAVJ_UI/JPB_PAVJ_UICharacter.h"
 
@@ -31,6 +34,10 @@ void USkillTreeWidget::Show() {
     if (!pSkillButton) continue;
     pSkillButton->OnUnlockRequested.AddUObject(this, &USkillTreeWidget::HandleRequestUnlockNode);
   }
+  if (AJPB_PAVJ_UICharacter* pCharacter = Cast<AJPB_PAVJ_UICharacter>(GetOwningPlayerPawn())) {
+    pCharacter->OnPointsChanged.AddUObject(this, &USkillTreeWidget::UpdatePointsText);
+    UpdatePointsText(pCharacter->GetCurrentSkillPoints());
+  }
 }
 
 void USkillTreeWidget::Hide() {
@@ -50,6 +57,9 @@ void USkillTreeWidget::Hide() {
   for (USkillButton* pSkillButton : m_lNodeWidgets) {
     if (!pSkillButton) continue;
     pSkillButton->OnUnlockRequested.RemoveAll(this);
+  }
+  if (AJPB_PAVJ_UICharacter* pCharacter = Cast<AJPB_PAVJ_UICharacter>(GetOwningPlayerPawn())) {
+    pCharacter->OnPointsChanged.RemoveAll(this);
   }
 }
 
@@ -72,7 +82,7 @@ void USkillTreeWidget::HandleRequestUnlockNode(FName _sNodeId) {
 
   if (AJPB_PAVJ_UICharacter* pCharacter = Cast<AJPB_PAVJ_UICharacter>(GetOwningPlayerPawn())) {
     int32 iCurrentPoints = pCharacter->GetCurrentSkillPoints();
-    m_pSkillTree->TryUnlockNode(_sNodeId, iCurrentPoints);
+    if (m_pSkillTree->TryUnlockNode(_sNodeId, iCurrentPoints)) pCharacter->SetCurrentSkillPoints(iCurrentPoints);
   }
 }
 
@@ -106,9 +116,16 @@ void USkillTreeWidget::NativeConstruct() {
 }
 
 void USkillTreeWidget::OnNodeUpdated(FName _sNodeId) {
-  for (USkillButton* pButton : m_lNodeWidgets) {
-    if (TSharedPtr<FSkillNode> pNode = pButton->GetBoundNode().Pin()) {
-      if (pNode->m_sId == _sNodeId) pButton->UpdateVisualsFromNode();
+  for (USkillButton* pSkillButton : m_lNodeWidgets) {
+    if (TSharedPtr<FSkillNode> pNode = pSkillButton->GetBoundNode().Pin()) {
+      if (pNode->m_sId == _sNodeId) pSkillButton->UpdateVisualsFromNode();
     }
+  }
+}
+
+void USkillTreeWidget::UpdatePointsText(int32 _iNewPoints) {
+  if (IsValid(m_pPoints)) {
+    m_pPoints->SetText(FText::AsNumber(_iNewPoints));
+    if (IsValid(m_pPointsAnimation)) PlayAnimation(m_pPointsAnimation, .0f, 1, EUMGSequencePlayMode::Forward);
   }
 }

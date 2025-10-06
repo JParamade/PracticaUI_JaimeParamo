@@ -4,6 +4,9 @@
 #include "CustomUserWidget.h"
 #include "SkillTreeWidget.generated.h"
 
+// Animation
+class UWidgetAnimation;
+
 // Character
 class AJPB_PAVJ_UICharacter;
 
@@ -59,15 +62,31 @@ protected:
 
 #pragma region Binding Functions
   /**
-   * @brief
+   * @brief @TOFILL
+   * @param _sNodeId 
    */
   UFUNCTION()
   void OnNodeUpdated(FName _sNodeId);
+
+  /**
+   * @brief @TOFILL
+   * @param _iNewPoints 
+   */
+  UFUNCTION()
+  void UpdatePointsText(int32 _iNewPoints);
 #pragma endregion
 
 #pragma region Containers
   UPROPERTY()
   TArray<TObjectPtr<USkillButton>> m_lNodeWidgets;
+#pragma endregion
+
+#pragma region Animations
+  /**
+   * @brief
+   */
+  UPROPERTY(meta = (BindWidgetAnim), Transient)
+  TObjectPtr<UWidgetAnimation> m_pPointsAnimation;
 #pragma endregion
 
 #pragma region Components

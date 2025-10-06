@@ -21,6 +21,8 @@ class USkillTreeWidget;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnPointsChanged, int32);
+
 UCLASS(config=Game)
 class AJPB_PAVJ_UICharacter : public ACharacter {
 #pragma region Template Defaults
@@ -82,12 +84,24 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 #pragma endregion
 
+#pragma region Delegates
+	FOnPointsChanged OnPointsChanged;
+#pragma endregion
+
 #pragma region Getters
 	/**
 	 * @brief @TOFILL
 	 * @return 
 	 */
 	int32 GetCurrentSkillPoints() const;
+#pragma endregion
+
+#pragma region Setters
+	/**
+	 * @brief @TOFILL
+	 * @param _NewPoints 
+	 */
+	void SetCurrentSkillPoints(int32 _iNewPoints);
 #pragma endregion
 
 protected:

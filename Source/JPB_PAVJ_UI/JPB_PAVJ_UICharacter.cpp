@@ -112,6 +112,11 @@ int32 AJPB_PAVJ_UICharacter::GetCurrentSkillPoints() const {
 	return m_iCurrentSkillPoints;
 }
 
+void AJPB_PAVJ_UICharacter::SetCurrentSkillPoints(int32 _iNewPoints) {
+	m_iCurrentSkillPoints = _iNewPoints;
+	OnPointsChanged.Broadcast(m_iCurrentSkillPoints);
+}
+
 void AJPB_PAVJ_UICharacter::BeginPlay() {
 	Super::BeginPlay();
 	

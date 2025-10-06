@@ -7,6 +7,10 @@
 // Animation
 class UWidgetAnimation;
 
+// Component
+class UImage;
+class UTextBlock;
+
 // Character
 class AJPB_PAVJ_UICharacter;
 
@@ -104,6 +108,24 @@ protected:
   TObjectPtr<UWidgetAnimation> m_pUnlockedAnimation;
 #pragma endregion
 
+#pragma region Components
+  /**
+   * @brief @TOFILL
+   */
+  UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+  TObjectPtr<UImage> m_pForeground;
+  /**
+   * @brief @TOFILL
+   */
+  UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+  TObjectPtr<UImage> m_pLock;
+  /**
+   * @brief @TOFILL
+   */
+  UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+  TObjectPtr<UTextBlock> m_pCost;
+#pragma endregion
+
 #pragma region Node
   /**
    * @brief @TOFILL
@@ -130,12 +152,6 @@ protected:
    */
   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JParamade|UI|Style", meta = (DisplayName = "Base Texture"))
   TObjectPtr<UTexture2D> m_pBaseTexture = nullptr;
-
-  /**
-   * @brief @TOFILL
-   */
-  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "JParamade|UI|Style", meta = (DisplayName = "Locked Texture"))
-  TObjectPtr<UTexture2D> m_pLockedTexture = nullptr;
 
   /**
    * @brief 

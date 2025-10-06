@@ -8,17 +8,32 @@
 
 // Component
 #include "Components/Button.h"
+#include "Components/Image.h"
 #include "Components/SizeBox.h"
+#include "Components/TextBlock.h"
 
 // Skill Tree
 #include "JPB_PAVJ_UI/UI/SkillTree.h"
 
 void USkillButton::Show() {
   Super::Show();
+  
+  if (TSharedPtr<FSkillNode> pNode = m_pBoundNode.Pin()) {
+    if (IsValid(m_pCost)) {
+      m_pCost->SetText(FText::AsNumber(pNode->m_iUnlockCost));
+      m_pCost->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+    }
+  }
+
+  UpdateVisualsFromNode();
 }
 
 void USkillButton::Hide() {
   Super::Hide();
+
+  if (IsValid(m_pCost)) m_pCost->SetVisibility(ESlateVisibility::Hidden);
+  if (IsValid(m_pForeground)) m_pForeground->SetVisibility(ESlateVisibility::Hidden);
+  if (IsValid(m_pLock)) m_pLock->SetVisibility(ESlateVisibility::Hidden);
 }
 
 TWeakPtr<FSkillNode> USkillButton::GetBoundNode() const {
@@ -28,7 +43,6 @@ TWeakPtr<FSkillNode> USkillButton::GetBoundNode() const {
 void USkillButton::InitializeWithNode(TSharedPtr<FSkillNode> _pNode, AJPB_PAVJ_UICharacter* _pOwner) {
   m_pBoundNode = _pNode;
   m_pOwningCharacter = _pOwner;
-  UpdateVisualsFromNode();
 }
 
 void USkillButton::NativeConstruct() {
@@ -66,10 +80,7 @@ void USkillButton::NativeTick(const FGeometry& _rMyGeometry, float _fInDeltaTime
 
         m_fFillAmount = FMath::Clamp(m_fFillAmount + _fInDeltaTime * m_fFillSpeed, .0f, 1.f);
 
-        if (m_fFillAmount >= 1.f) {
-          OnUnlockRequested.Broadcast(pNode->m_sId);
-          if (IsValid(m_pUnlockedAnimation)) PlayAnimation(m_pUnlockedAnimation, .0f, 1, EUMGSequencePlayMode::Forward);
-        }
+        if (m_fFillAmount >= 1.f) OnUnlockRequested.Broadcast(pNode->m_sId);
       }
       else m_fFillAmount = FMath::Clamp(m_fFillAmount - _fInDeltaTime * m_fFillSpeed, .0f, 1.f);
     }
@@ -107,30 +118,15 @@ void USkillButton::OnButtonReleased() {
 
 void USkillButton::UpdateVisualsFromNode() {
   if (TSharedPtr<FSkillNode> pNode = m_pBoundNode.Pin()) {
-    if (IsValid(m_pButton) && IsValid(m_pLockedTexture) && IsValid(m_pFillDynamicMaterial)) {
-      FButtonStyle oNewStyle = m_pButton->GetStyle();
-
-      if (pNode->IsLocked()) {
-        oNewStyle.Normal.SetResourceObject(m_pLockedTexture);
-        oNewStyle.Hovered.SetResourceObject(m_pLockedTexture);
-        oNewStyle.Pressed.SetResourceObject(m_pLockedTexture);
-        oNewStyle.Disabled.SetResourceObject(m_pLockedTexture);
-      }
-      else {
-        oNewStyle.Normal.SetResourceObject(m_pFillDynamicMaterial);
-        oNewStyle.Hovered.SetResourceObject(m_pFillDynamicMaterial);
-        oNewStyle.Pressed.SetResourceObject(m_pFillDynamicMaterial);
-        oNewStyle.Disabled.SetResourceObject(m_pFillDynamicMaterial);
-
-        m_pFillDynamicMaterial->SetScalarParameterValue("FillAmount", pNode->IsUnlocked() ? 1.f : .0f);
-      }
-    }
+    if (IsValid(m_pForeground)) m_pForeground->SetVisibility(pNode->IsLocked() ? ESlateVisibility::SelfHitTestInvisible : ESlateVisibility::Hidden);
+    if (IsValid(m_pLock)) m_pLock->SetVisibility(pNode->IsLocked() ? ESlateVisibility::SelfHitTestInvisible : ESlateVisibility::Hidden);
+  
+    if (IsValid(m_pUnlockedAnimation)) PlayAnimation(m_pUnlockedAnimation, .0f, 1, EUMGSequencePlayMode::Forward);
   }
 }
 
 void USkillButton::SetupDynamicMaterial() {
   if (!IsValid(m_pBaseMaterial)) m_pBaseMaterial = GetClass()->GetDefaultObject<USkillButton>()->m_pBaseMaterial;
-  if (!IsValid(m_pLockedTexture)) m_pLockedTexture = GetClass()->GetDefaultObject<USkillButton>()->m_pLockedTexture;
 
   if (IsValid(m_pBaseMaterial)) {
     m_pFillDynamicMaterial = UMaterialInstanceDynamic::Create(m_pBaseMaterial, this);
