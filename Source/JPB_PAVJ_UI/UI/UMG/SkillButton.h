@@ -4,6 +4,17 @@
 #include "CustomButtonWidget.h"
 #include "SkillButton.generated.h"
 
+// Animation
+class UWidgetAnimation;
+
+// Character
+class AJPB_PAVJ_UICharacter;
+
+// Skill Tree
+struct FSkillNode;
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnUnlockRequested, FName);
+
 UCLASS()
 class JPB_PAVJ_UI_API USkillButton : public UCustomButtonWidget
 {
@@ -19,6 +30,33 @@ public:
    * @brief Hides the UMG elements of this Widget.
    */
   virtual void Hide() override;
+#pragma endregion
+
+#pragma region Getters
+  /**
+   * @brief @TOFILL
+   * @return 
+   */
+  TWeakPtr<FSkillNode> GetBoundNode() const;
+#pragma endregion
+
+#pragma region Skill Tree
+  /**
+   * @brief @TOFILL
+   * @param _pNode 
+   */
+  void InitializeWithNode(TSharedPtr<FSkillNode> _pNode, AJPB_PAVJ_UICharacter* _pOwner);
+
+  /**
+   * @brief @TOFILL
+   */
+  UFUNCTION()
+  void UpdateVisualsFromNode();
+
+  /**
+   * @brief @TOFILL
+   */
+  FOnUnlockRequested OnUnlockRequested;
 #pragma endregion
 
 protected:
@@ -53,18 +91,51 @@ protected:
   void OnButtonReleased();
 #pragma endregion
 
+#pragma region Animations
+  /**
+   * @brief 
+   */
+  UPROPERTY(meta = (BindWidgetAnim), Transient)
+  TObjectPtr<UWidgetAnimation> m_pUnavailableAnimation;
+  /**
+   * @brief
+   */
+  UPROPERTY(meta = (BindWidgetAnim), Transient)
+  TObjectPtr<UWidgetAnimation> m_pUnlockedAnimation;
+#pragma endregion
+
+#pragma region Node
+  /**
+   * @brief @TOFILL
+   */
+  TWeakPtr<FSkillNode> m_pBoundNode;
+#pragma endregion
+
+#pragma region Player
+  /**
+   * @brief
+   */
+  AJPB_PAVJ_UICharacter* m_pOwningCharacter = nullptr;
+#pragma endregion
+
 #pragma region Style
   /**
    * @brief @TOFILL
    */
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JParamade|UI|Style", meta = (DisplayName = "Material Base"))
-  UMaterialInterface* m_pMaterialBase;
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "JParamade|UI|Style", meta = (DisplayName = "Base Material"))
+  TObjectPtr<UMaterialInterface> m_pBaseMaterial = nullptr;
 
   /**
    * @brief @TOFILL
    */
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JParamade|UI|Style", meta = (DisplayName = "Texture"))
-  TObjectPtr<UTexture2D> m_pTexture;
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JParamade|UI|Style", meta = (DisplayName = "Base Texture"))
+  TObjectPtr<UTexture2D> m_pBaseTexture = nullptr;
+
+  /**
+   * @brief @TOFILL
+   */
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "JParamade|UI|Style", meta = (DisplayName = "Locked Texture"))
+  TObjectPtr<UTexture2D> m_pLockedTexture = nullptr;
 
   /**
    * @brief 
@@ -83,12 +154,12 @@ protected:
   /**
    * @brief @TOFILL
    */
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JParamade|UI|Feedback", meta = (DisplayName = "Vibration Speed"))
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "JParamade|UI|Feedback", meta = (DisplayName = "Vibration Speed"))
   float m_fVibrationSpeed = 80.f;
   /**
    * @brief @TOFILL
    */
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JParamade|UI|Feedback", meta = (DisplayName = "Vibration Amplitude"))
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "JParamade|UI|Feedback", meta = (DisplayName = "Vibration Amplitude"))
   float m_fVibrationAmplitude = 1.f;
   /**
    * @brief @TOFILL
@@ -104,7 +175,7 @@ protected:
   /**
    * @brief @TOFILL
    */
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JParamade|UI|Feedback", meta = (DisplayName = "Pressed Scale"))
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "JParamade|UI|Feedback", meta = (DisplayName = "Pressed Scale"))
   float m_fPressedScale = 1.05f;
 #pragma endregion
 
@@ -116,12 +187,12 @@ protected:
   /**
    * @brief @TOFILL
    */
-  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JParamade|UI|Feedback", meta = (DisplayName = "Fill Speed"))
+  UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "JParamade|UI|Feedback", meta = (DisplayName = "Fill Speed"))
   float m_fFillSpeed = 1.f;
 
   /**
    * @brief @TOFILL
    */
-  TObjectPtr<UMaterialInstanceDynamic> m_pFillDynamicMaterial;
+  TObjectPtr<UMaterialInstanceDynamic> m_pFillDynamicMaterial = nullptr;
 #pragma endregion
 };

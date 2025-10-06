@@ -82,6 +82,14 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 #pragma endregion
 
+#pragma region Getters
+	/**
+	 * @brief @TOFILL
+	 * @return 
+	 */
+	int32 GetCurrentSkillPoints() const;
+#pragma endregion
+
 protected:
 #pragma region Native Functions
 	virtual void BeginPlay() override;
@@ -89,10 +97,15 @@ protected:
 
 #pragma region Widget
 	/**
+	 * @brief 
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JParamade|UI", meta = (DisplayName = "Skill Tree Widget Class"))
+	TSubclassOf<USkillTreeWidget> m_pSkillTreeWidgetClass;
+
+	/**
    * @brief @TOFILL
    */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JParamade|UI", meta = (DisplayName = "Skill Tree Widget"))
-	TObjectPtr<USkillTreeWidget> m_pSkillTreeWidget;
+	TObjectPtr<USkillTreeWidget> m_pSkillTreeWidget = nullptr;
 #pragma endregion
 
 private:
@@ -100,14 +113,14 @@ private:
 	/**
 	 * @brief @TOFILL
 	 */
-	UPROPERTY(EditAnywhere, meta = (DisplayName = "Skill Tree Component"));
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (DisplayName = "Skill Tree Component", AllowPrivateAccess = true));
 	TObjectPtr<USkillTree> m_pSkillTreeComponent;
 
 	/**
 	 * @brief @TOFILL
 	 */
 	UPROPERTY(EditAnywhere, Category = "Skill Tree", meta = (DisplayName = "Current Skill Points"))
-	int32 m_iCurrentSkillPoints;
+	int32 m_iCurrentSkillPoints = 9;
 #pragma endregion
 };
 

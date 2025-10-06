@@ -58,6 +58,10 @@ AJPB_PAVJ_UICharacter::AJPB_PAVJ_UICharacter()
 
 	// Create Skill Tree component.
 	m_pSkillTreeComponent = CreateDefaultSubobject<USkillTree>(TEXT("SkillTreeComponent"));
+	if (IsValid(m_pSkillTreeComponent)) {
+		static ConstructorHelpers::FObjectFinder<UDataTable> NodeDataTable(TEXT("/Game/Data/DT_SkillNodeData.DT_SkillNodeData"));
+		if (NodeDataTable.Succeeded()) m_pSkillTreeComponent->m_pNodeData = NodeDataTable.Object;
+	}
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
@@ -104,10 +108,24 @@ void AJPB_PAVJ_UICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	}
 }
 
+int32 AJPB_PAVJ_UICharacter::GetCurrentSkillPoints() const {
+	return m_iCurrentSkillPoints;
+}
+
 void AJPB_PAVJ_UICharacter::BeginPlay() {
 	Super::BeginPlay();
+	
+	if (IsValid(m_pSkillTreeWidgetClass)) m_pSkillTreeWidget = CreateWidget<USkillTreeWidget>(GetWorld(), m_pSkillTreeWidgetClass);
 
-	if (IsValid(m_pSkillTreeWidget)) m_pSkillTreeWidget->AddToViewport();
+	if (IsValid(m_pSkillTreeComponent) && IsValid(m_pSkillTreeWidget)) {
+		m_pSkillTreeComponent->BuildFromDataTable();
+		
+		TArray<FName> lNodeIds;
+		m_pSkillTreeComponent->GetAllNodeIds(lNodeIds);
+
+		m_pSkillTreeWidget->AddToViewport();
+		m_pSkillTreeWidget->InitializeFromSkillTree(m_pSkillTreeComponent, lNodeIds, this);
+	}
 }
 
 void AJPB_PAVJ_UICharacter::Move(const FInputActionValue& Value)
@@ -148,7 +166,18 @@ void AJPB_PAVJ_UICharacter::Look(const FInputActionValue& Value)
 
 void AJPB_PAVJ_UICharacter::HandleSkillTree(const FInputActionValue& Value) {
 	if (IsValid(m_pSkillTreeWidget)) {
-		if (!m_pSkillTreeWidget->IsWidgetVisible()) m_pSkillTreeWidget->Show();
+		const bool bVisible = !m_pSkillTreeWidget->IsWidgetVisible();
+
+		if (bVisible) m_pSkillTreeWidget->Show();
 		else m_pSkillTreeWidget->Hide();
+
+		if (UWorld* pWorld = GetWorld()) {
+			if (APlayerController* pPlayerController = pWorld->GetFirstPlayerController()) {
+				if (bVisible) pPlayerController->SetInputMode(FInputModeGameAndUI());
+				else pPlayerController->SetInputMode(FInputModeGameOnly());
+
+				pPlayerController->SetShowMouseCursor(bVisible);
+			}
+		}
 	}
 }

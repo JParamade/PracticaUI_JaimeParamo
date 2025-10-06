@@ -4,9 +4,15 @@
 #include "CustomUserWidget.h"
 #include "SkillTreeWidget.generated.h"
 
+// Character
+class AJPB_PAVJ_UICharacter;
+
 // Component
 class UImage;
 class UTextBlock;
+
+// Skill Tree
+class USkillTree;
 
 // Widget
 class USkillButton;
@@ -28,12 +34,40 @@ public:
 	virtual void Hide() override;
 #pragma endregion
 
+#pragma region Skill Tree
+  /**
+   * @brief @TOFILL
+   * @param SkillTree 
+   * @param NodeIds 
+   */
+  void InitializeFromSkillTree(USkillTree* _pSkillTree, const TArray<FName>& _rNodeIds, AJPB_PAVJ_UICharacter* _pOwner);
+
+  /**
+   * @brief 
+   * @param _sNodeId 
+   */
+  void HandleRequestUnlockNode(FName _sNodeId);
+#pragma endregion
+
 protected:
 #pragma region Native Functions
 	/**
 	 * @brief Called when the widget is constructed.
 	 */
 	virtual void NativeConstruct() override;
+#pragma endregion
+
+#pragma region Binding Functions
+  /**
+   * @brief
+   */
+  UFUNCTION()
+  void OnNodeUpdated(FName _sNodeId);
+#pragma endregion
+
+#pragma region Containers
+  UPROPERTY()
+  TArray<TObjectPtr<USkillButton>> m_lNodeWidgets;
 #pragma endregion
 
 #pragma region Components
@@ -58,12 +92,28 @@ protected:
    * @brief @TOFILL
    */
   UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+  TObjectPtr<UTextBlock> m_pHealthText;
+  /**
+   * @brief @TOFILL
+   */
+  UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
   TObjectPtr<USkillButton> m_pSkillButton1;
   /**
    * @brief @TOFILL
    */
   UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+  TObjectPtr<UImage> m_pConnector1;
+  /**
+   * @brief @TOFILL
+   */
+  UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
   TObjectPtr<USkillButton> m_pSkillButton2;
+
+  /**
+   * @brief @TOFILL
+   */
+  UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+  TObjectPtr<UTextBlock> m_pStaminaText;
   /**
    * @brief @TOFILL
    */
@@ -73,7 +123,18 @@ protected:
    * @brief @TOFILL
    */
   UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+  TObjectPtr<UImage> m_pConnector2;
+  /**
+   * @brief @TOFILL
+   */
+  UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
   TObjectPtr<USkillButton> m_pSkillButton4;
+
+  /**
+   * @brief @TOFILL
+   */
+  UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+  TObjectPtr<UTextBlock> m_pMovementText;
   /**
    * @brief @TOFILL
    */
@@ -83,6 +144,15 @@ protected:
    * @brief @TOFILL
    */
   UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+  TObjectPtr<UImage> m_pConnector3;
+  /**
+   * @brief @TOFILL
+   */
+  UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
   TObjectPtr<USkillButton> m_pSkillButton6;
 #pragma endregion
+
+#pragma region Skill Tree
+  TObjectPtr<USkillTree> m_pSkillTree = nullptr;
+#pragma endregion 
 };

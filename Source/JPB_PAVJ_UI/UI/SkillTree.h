@@ -11,6 +11,15 @@ enum class ENodeState : uint8 {
 };
 
 struct FSkillNode {
+#pragma region Constructors
+	/**
+	 * @brief 
+	 * @param InId 
+	 * @param InCost 
+	 */
+	FSkillNode(FName _sId = NAME_None, int32 _iUnlockCost = 0);
+#pragma endregion
+
 #pragma region Identification
 	/**
 	 * @brief Unique ID for this node.
@@ -34,19 +43,19 @@ struct FSkillNode {
 	/**
    * @brief Unlocked parent nodes required to unlock this one.
    */
-	TArray<TObjectPtr<FSkillNode>> m_lRequiredParents;
+	TArray<TWeakPtr<FSkillNode>> m_lRequiredParents;
 #pragma endregion 
 
 #pragma region Relationships
 	/**
 	 * @brief Children nodes connected to this one.
 	 */
-	TArray<TObjectPtr<FSkillNode>> m_lChildren;
+	TArray<TWeakPtr<FSkillNode>> m_lChildren;
 
 	/**
 	 * @brief Parent node of this one.
 	 */
-	TObjectPtr<FSkillNode> m_pParent = nullptr;
+	TWeakPtr<FSkillNode> m_pParent = nullptr;
 #pragma endregion
 
 #pragma region Helper Functions
@@ -67,11 +76,20 @@ struct FSkillNode {
 	 * @return True if the node status is Unlocked.
 	 */
 	bool IsUnlocked() const; 
+
+	/**
+	 * @brief @TOFILL
+	 * @param _iCurrentPoints 
+	 * @return 
+	 */
+	bool CanUnlock(int32 _iCurrentPoints) const;
 #pragma endregion
 };
 
 // Data
 class UDataTable;
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnNodeStateChanged, FName);
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class JPB_PAVJ_UI_API USkillTree : public UActorComponent
@@ -79,9 +97,51 @@ class JPB_PAVJ_UI_API USkillTree : public UActorComponent
 	GENERATED_BODY()
 	
 public:
+#pragma region Data
 	/**
 	 * @brief Data Table containing Skill Node data.
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill Tree", meta = (DisplayName = "Skill Node Data"))
 	TObjectPtr<UDataTable> m_pNodeData;
+
+	/**
+	 * @brief @TOFILL
+	 */
+	void BuildFromDataTable();
+
+	/**
+	 * @brief @TOFILL
+	 * @param _rOutIds 
+	 */
+	void GetAllNodeIds(TArray<FName>& _rOutNodeIds) const;
+#pragma endregion
+
+#pragma region Node
+	/**
+	 * @brief @TOFILL
+	 */
+	FOnNodeStateChanged OnNodeChanged;
+	
+	/**
+	 * @brief @TOFILL
+	 * @param NodeId 
+	 * @param OutCost 
+	 * @return 
+	 */
+	bool TryUnlockNode(const FName& _rNodeId, int32& _rCurrentPoints);
+
+	/**
+	 * @brief @TOFILL
+	 * @param NodeId 
+	 * @return 
+	 */
+	TSharedPtr<FSkillNode> GetNode(const FName& _rNodeId) const;
+#pragma endregion
+
+private:
+#pragma region Containers
+	/**
+	 * @brief @TOFILL
+	 */
+	TMap<FName, TSharedPtr<FSkillNode>> m_mNodes;
+#pragma endregion
 };

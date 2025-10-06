@@ -42,6 +42,7 @@ protected:
 	/**
 	 * @brief List of non focusable UI elements contained in the widget.
 	 */
+	UPROPERTY()
 	TArray<TObjectPtr<UCustomUserWidget>> m_lWidgets;
 #pragma endregion
 
