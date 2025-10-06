@@ -22,6 +22,9 @@ void USkillTreeWidget::Show() {
   if (IsValid(m_pConnector1)) m_pConnector1->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
   if (IsValid(m_pConnector2)) m_pConnector2->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
   if (IsValid(m_pConnector3)) m_pConnector3->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+  if (IsValid(m_pHealthText)) m_pHealthText->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+  if (IsValid(m_pStaminaText)) m_pStaminaText->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+  if (IsValid(m_pMovementText)) m_pMovementText->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 
   if (IsValid(m_pSkillTree)) m_pSkillTree->OnNodeChanged.AddUObject(this, &USkillTreeWidget::OnNodeUpdated);
   for (USkillButton* pSkillButton : m_lNodeWidgets) {
@@ -39,6 +42,9 @@ void USkillTreeWidget::Hide() {
   if (IsValid(m_pConnector1)) m_pConnector1->SetVisibility(ESlateVisibility::Hidden);
   if (IsValid(m_pConnector2)) m_pConnector2->SetVisibility(ESlateVisibility::Hidden);
   if (IsValid(m_pConnector3)) m_pConnector3->SetVisibility(ESlateVisibility::Hidden);
+  if (IsValid(m_pHealthText)) m_pHealthText->SetVisibility(ESlateVisibility::Hidden);
+  if (IsValid(m_pStaminaText)) m_pStaminaText->SetVisibility(ESlateVisibility::Hidden);
+  if (IsValid(m_pMovementText)) m_pMovementText->SetVisibility(ESlateVisibility::Hidden);
 
   if (IsValid(m_pSkillTree)) m_pSkillTree->OnNodeChanged.RemoveAll(this);
   for (USkillButton* pSkillButton : m_lNodeWidgets) {
