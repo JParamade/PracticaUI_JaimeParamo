@@ -33,13 +33,3 @@ Esta capa proporciona la interacción visual con el jugador.
 * Gestionan eventos como **hover**, **clic** o **selección**.
 
 La interfaz escucha los cambios de la capa lógica y se actualiza automáticamente, asegurando que el jugador vea información precisa.
-
-## 3. Capa de Integración con el Juego
-
-Conecta las habilidades desbloqueadas con efectos reales en el gameplay.
-
-### Capacidades de Integración
-
-* **Progresión del jugador:** Activa habilidades, estadísticas o efectos de juego.
-* **Eventos y Delegados:** Notifica a otros sistemas cuando se desbloquea una habilidad.
-* **Guardado y Carga:** Conserva el progreso del árbol entre sesiones.
