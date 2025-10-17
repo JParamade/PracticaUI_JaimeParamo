@@ -43,20 +43,3 @@ Conecta las habilidades desbloqueadas con efectos reales en el gameplay.
 * **Progresión del jugador:** Activa habilidades, estadísticas o efectos de juego.
 * **Eventos y Delegados:** Notifica a otros sistemas cuando se desbloquea una habilidad.
 * **Guardado y Carga:** Conserva el progreso del árbol entre sesiones.
-
-## Diagrama del Sistema
-
-```
-[ Entrada del Jugador ]
-       |
-       v
-[ Capa UI – Botones de Habilidad ]
-       |
-       v
-[ Capa Lógica – Nodos de Habilidad ]
-       |     \-- Valida coste y dependencias
-       |
-       v
-[ Integración con el Juego ]
-       \-- Aplica habilidades, guarda progreso
-```
